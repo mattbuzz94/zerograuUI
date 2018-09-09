@@ -1,0 +1,26 @@
+<div class="table-responsive-md">
+  <table class="table table light table-hover">
+    <thead>
+      <tr>
+        <th>ID Produto</th>
+        <th>Descrição</th>
+        <th>Preço Compra</th>
+        <th>Preço Venda</th>
+        <th>Código de Barras</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let produto of produtos; let i = index;">
+        <td>{{ produto.idProduto }}</td>
+        <td>{{ produto.descProduto }}</td>
+        <td>{{ produto.precoCompra }}</td>
+        <td>{{ produto.precoVenda }}</td>
+        <td>{{ produto.codigoBarras }}</td>
+      </tr>
+      <tr>
+        <td colspan="6" style="text-align: right;">Total de Registros: {{ produtos.length }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
