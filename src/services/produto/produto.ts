@@ -1,8 +1,13 @@
 export class Produto {
-    idProduto: number;
-    descProduto = '';
-    precoCompra: number;
-    precoVenda: number;
-    codigoBarras: number;
-    imageUrl = '';
+
+
+    constructor(
+        
+        public descProduto = '',
+        public precoVenda: number,        
+        public codigoBarras: number,
+        public precoCompra?: number,
+        public idProduto?: number,
+        public qtdEstoque?: number) { }
+
 }
