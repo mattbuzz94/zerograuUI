@@ -8,14 +8,6 @@
             "url": "http://localhost:4200",
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}"
-        },
-        {
-            "type": "chrome",
-            "request": "attach",
-            "name": "Attach to Chrome",
-            "port": 9222,
-            "sourceMaps": true,
-            "webRoot": "${workspaceRoot}"
-        }
+        }        
     ]
 }

@@ -1,26 +1,50 @@
-<div class="table-responsive-md">
-  <table class="table table light table-hover">
-    <thead>
-      <tr>
-        <th>ID Produto</th>
-        <th>Descrição</th>
-        <th>Preço Compra</th>
-        <th>Preço Venda</th>
-        <th>Código de Barras</th>
-      </tr>
-    </thead>
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>Cadastro de Produtos</nb-card-header>
+      <nb-card-body>
+        <mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef> Alterações </mat-header-cell>
+            <mat-cell *matCellDef="let produto">
+              <button mat-button (click)="onDelete(produto.idProduto)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <!--<ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let produto" (click)="$event.stopPropagation()">
+              <button mat-button (click)="onDelete(group.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container> -->
+          <ng-container matColumnDef="idProduto">
+            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+            <mat-cell *matCellDef="let produto"> {{produto.idProduto}} </mat-cell>
+          </ng-container>
 
-    <tbody>
-      <tr *ngFor="let produto of produtos; let i = index;">
-        <td>{{ produto.idProduto }}</td>
-        <td>{{ produto.descProduto }}</td>
-        <td>{{ produto.precoCompra }}</td>
-        <td>{{ produto.precoVenda }}</td>
-        <td>{{ produto.codigoBarras }}</td>
-      </tr>
-      <tr>
-        <td colspan="6" style="text-align: right;">Total de Registros: {{ produtos.length }}</td>
-      </tr>
-    </tbody>
-  </table>
+          <ng-container matColumnDef="descProduto">
+            <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
+            <mat-cell *matCellDef="let produto"> {{produto.descProduto}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="precoCompra">
+            <mat-header-cell *matHeaderCellDef> Preço de Compra </mat-header-cell>
+            <mat-cell *matCellDef="let produto"> {{produto.precoCompra}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="precoVenda">
+            <mat-header-cell *matHeaderCellDef> Preço de Venda </mat-header-cell>
+            <mat-cell *matCellDef="let produto"> {{produto.precoVenda}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </mat-table>
+      </nb-card-body>
+    </nb-card>
+  </div>
 </div>

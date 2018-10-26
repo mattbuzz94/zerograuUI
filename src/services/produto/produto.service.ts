@@ -48,7 +48,7 @@ export class ProdutoService {
   /** DELETE: delete the produto from the server */
   deleteProduto(produto: Produto | number): Observable<Produto> {
     const id = typeof produto === 'number' ? produto : produto.idProduto;
-    const url = `${this.produtoUrl}/${id}`;
+    const url = `${this.produtoUrl}${id}`;
 
     return this.httpClient.delete<Produto>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted produto id=${id}`)),
