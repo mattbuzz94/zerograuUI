@@ -7,19 +7,11 @@
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef> Alterações </mat-header-cell>
             <mat-cell *matCellDef="let produto">
-              <button mat-button (click)="onDelete(produto.idProduto)">
-                <mat-icon>delete</mat-icon>
+                           <button mat-icon-button color="accent" (click)="deleteItem(i, produto.idProduto,produto.descProduto, produto.codigoBarras)">
+                <mat-icon aria-label="Delete">Excluir</mat-icon>
               </button>
             </mat-cell>
           </ng-container>
-          <!--<ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let produto" (click)="$event.stopPropagation()">
-              <button mat-button (click)="onDelete(group.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-cell>
-          </ng-container> -->
           <ng-container matColumnDef="idProduto">
             <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
             <mat-cell *matCellDef="let produto"> {{produto.idProduto}} </mat-cell>
@@ -41,7 +33,7 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"(click)="onRowClicked(row)"></mat-row>
 
         </mat-table>
       </nb-card-body>

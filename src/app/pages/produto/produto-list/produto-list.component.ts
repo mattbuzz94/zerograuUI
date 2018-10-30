@@ -1,60 +1,146 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Produto } from '../../../../services/produto/produto';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {MatDialog, MatPaginator, MatSort} from '@angular/material';
+import {DataSource} from '@angular/cdk/collections';
+import {DeleteDialogComponent} from './dialogs/delete/delete.dialog.component';
+import {BehaviorSubject, fromEvent, merge, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 import { ProdutoService } from '../../../../services/produto/produto.service';
-import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import { ToastrService } from 'ngx-toastr';
-//import { MatSnackBar, MatDialog, MatTableDataSource } from '@angular/material';
-//import { connect } from 'net';
+import { Produto } from '../../../../services/produto/produto';
 
+
+
+export interface DialogData {
+  idproduto: number;
+}
 @Component({
   selector: 'produto-list',
   templateUrl: './produto-list.component.html',
   styleUrls: ['./produto-list.component.scss']
 })
 export class ProdutoListComponent implements OnInit {
-  dataSource = new ProdutoDataSource(this.produtoService);
+  //dataSource = new ProdutoDataSource(this.produtoService);
   displayedColumns = ['idProduto', 'descProduto', 'precoCompra', 'precoVenda', 'actions'];
   produtos: Produto[] = [];
-  //dataSource1 = new MatTableDataSource<Produto>();
-  constructor(private produtoService: ProdutoService,
-    private toastr: ToastrService,
-    //private dialog: MatDialog,
-    private router: Router) { }
+  idProduto: number;
+  index: number;
 
-  onDelete(idProduto: number): void {
-    //this.produtos = this.produtos.filter(h => h !== hero);
-    this.produtos = this.produtos.filter(item => item.idProduto != idProduto);
-    this.produtoService.deleteProduto(idProduto).subscribe(
-      data => {
-        console.log('Sucess');
-        this.showSuccess();
-      },
-      error => {
-        console.log('Erro');
-        this.showError();
-      });
-    this.dataSource.connect();
-  }
-  showSuccess() {
-    this.toastr.success('Sucesso!', 'Produto Excluído', {
-      timeOut: 3000
-    });
-  }
-  showError() {
-    this.toastr.error('Erro', 'Produto não deletado!', {
-      timeOut: 3000
-    });
-  }
+  produtoService: ProdutoService | null;
+  dataSource: ProdutoDataSource | null;
+  
+  constructor(public httpClient: HttpClient,
+              public dialog: MatDialog,
+              public dataService: ProdutoService) {}
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('filter') filter: ElementRef;
+
   ngOnInit() {
-    //this.dataSource.connect();
+    this.loadData();
   }
+
   refresh() {
-   // this.produtoService.getProdutos().subscribe(data: MyDataType[] => {
-     // this.dataSource.data = data});
-     this.produtoService.getProdutos().subscribe(products => this.produtos = products);
+    this.loadData();
   }
+
+  onRowClicked(row) {
+    this.idProduto = row.idProduto;
+    console.log('Row clicked: ', row);
+  }
+ /* addNew(produto: Produto) {
+    const dialogRef = this.dialog.open(AddDialogComponent, {
+      data: {produto: produto }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // After dialog is closed we're doing frontend updates
+        // For add we're just pushing a new row inside ProdutoService
+        this.produtoService.dataChange.value.push(this.dataService.getDialogData());
+        this.refreshTable();
+      }
+    });
+  }
+
+  startEdit(i: number, id: number, title: string, state: string, url: string, created_at: string, updated_at: string) {
+    this.id = id;
+    // index row is used just for debugging proposes and can be removed
+    this.index = i;
+    console.log(this.index);
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      data: {id: id, title: title, state: state, url: url, created_at: created_at, updated_at: updated_at}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside ProdutoService by id
+        const foundIndex = this.produtoService.dataChange.value.findIndex(x => x.id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
+        this.produtoService.dataChange.value[foundIndex] = this.dataService.getDialogData();
+        // And lastly refresh table
+        this.refreshTable();
+      }
+    });
+  }*/
+
+  deleteItem(i: number, idProduto: number, descProduto: string, codigoBarras: number) {
+    this.index = i;
+    this.idProduto = idProduto;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {idProduto: idProduto, descProduto: descProduto, codigoBarras: codigoBarras}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        const foundIndex = this.produtoService.dataChange.value.findIndex(x => x.idProduto === this.idProduto);
+        // for delete we use splice in order to remove single object from ProdutoService
+        this.produtoService.dataChange.value.splice(foundIndex, 1);
+        this.refreshTable();
+      }
+    });
+  }
+
+
+  private refreshTable() {
+    // Refreshing table using paginator
+    // Thanks yeager-j for tips
+    // https://github.com/marinantonio/angular-mat-table-crud/produtos/12
+   // this.paginator._changePageSize(this.paginator.pageSize);
+  }
+
+
+  /*   // If you don't need a filter or a pagination this can be simplified, you just use code from else block
+    // OLD METHOD:
+    // if there's a paginator active we're using it for refresh
+    if (this.dataSource._paginator.hasNextPage()) {
+      this.dataSource._paginator.nextPage();
+      this.dataSource._paginator.previousPage();
+      // in case we're on last page this if will tick
+    } else if (this.dataSource._paginator.hasPreviousPage()) {
+      this.dataSource._paginator.previousPage();
+      this.dataSource._paginator.nextPage();
+      // in all other cases including active filter we do it like this
+    } else {
+      this.dataSource.filter = '';
+      this.dataSource.filter = this.filter.nativeElement.value;
+    }*/
+
+
+
+  public loadData() {
+    this.produtoService = new ProdutoService(this.httpClient);
+    this.dataSource = new ProdutoDataSource(this.produtoService);//, this.paginator, this.sort);
+    /*fromEvent(this.filter.nativeElement, 'keyup')
+      // .debounceTime(150)
+      // .distinctUntilChanged()
+      .subscribe(() => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter.nativeElement.value;
+      });
+  */}
 }
 
 export class ProdutoDataSource extends DataSource<any> {
