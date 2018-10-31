@@ -21,12 +21,13 @@ export class ProdutoService {
   dataChange: BehaviorSubject<Produto[]> = new BehaviorSubject<Produto[]>([]);
   // Temporarily stores data from dialogs
   dialogData: any;
-  constructor(private httpClient: HttpClient) {
-
-  }
+  constructor(private httpClient: HttpClient) { }
 
   get data(): Produto[] {
     return this.dataChange.value;
+  }
+  getDialogData() {
+    return this.dialogData;
   }
   /*getProdutoNo404<Data>(id: number): Observable<Produto> {
     const url = `${this.produtoUrl}/?id=${id}`;
@@ -80,6 +81,16 @@ export class ProdutoService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  /** CRUD METHODS */
+  getAllProdutos(): void {
+    this.httpClient.get<Produto[]>(this.produtoUrl).subscribe(data => {
+        this.dataChange.next(data);
+      },
+      (error: HttpErrorResponse) => {
+      console.log (error.name + ' ' + error.message);
+      });
   }
 
   public getProdutosBusca(textoBusca: string, projeto: string): Observable<Produto[]> {

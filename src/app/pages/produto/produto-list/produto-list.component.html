@@ -1,41 +1,85 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>Cadastro de Produtos</nb-card-header>
+
       <nb-card-body>
-        <mat-table [dataSource]="dataSource">
-          <ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef> Alterações </mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-                           <button mat-icon-button color="accent" (click)="deleteItem(i, produto.idProduto,produto.descProduto, produto.codigoBarras)">
-                <mat-icon aria-label="Delete">Excluir</mat-icon>
-              </button>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="idProduto">
-            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
-            <mat-cell *matCellDef="let produto"> {{produto.idProduto}} </mat-cell>
-          </ng-container>
+        <mat-toolbar color="primary">
+          <span>Produtos</span>
+          <span class="spacer"></span>
+          <button mat-icon-button (click)="refresh()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </mat-toolbar>
 
-          <ng-container matColumnDef="descProduto">
-            <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
-            <mat-cell *matCellDef="let produto"> {{produto.descProduto}} </mat-cell>
-          </ng-container>
+        <div class="container mat-elevation-z8">
 
-          <ng-container matColumnDef="precoCompra">
-            <mat-header-cell *matHeaderCellDef> Preço de Compra </mat-header-cell>
-            <mat-cell *matCellDef="let produto"> {{produto.precoCompra}} </mat-cell>
-          </ng-container>
+          <div class="form">
+            <mat-form-field floatPlaceholder="never">
+              <input matInput #filter placeholder="Filtro">
+            </mat-form-field>
+          </div>
 
-          <ng-container matColumnDef="precoVenda">
-            <mat-header-cell *matHeaderCellDef> Preço de Venda </mat-header-cell>
-            <mat-cell *matCellDef="let produto"> {{produto.precoVenda}} </mat-cell>
-          </ng-container>
+          <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"(click)="onRowClicked(row)"></mat-row>
+            <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the produto definition" -->
 
-        </mat-table>
+            <!-- ID Column -->
+            <ng-container matColumnDef="idProduto">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+              <mat-cell *matCellDef="let produto">{{produto.idProduto}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="descProduto">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</mat-header-cell>
+              <mat-cell *matCellDef="let produto"> {{produto.descProduto}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="precoCompra">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Preço de Compra</mat-header-cell>
+              <mat-cell *matCellDef="let produto"> {{produto.precoCompra}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="precoVenda">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Preço de Venda</mat-header-cell>
+              <mat-cell *matCellDef="let produto"> {{produto.precoVenda}}</mat-cell>
+            </ng-container>
+
+
+
+            <!-- actions -->
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>
+                <button mat-icon-button color="primary" (click)="addNew()">
+                  <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+                </button>
+              </mat-header-cell>
+
+              <mat-cell *matCellDef="let produto; let i=index;">
+                <!--  <button mat-icon-button color="accent" (click)="startEdit(i, produto.id, produto.title, produto.state, produto.url, produto.created_at, produto.updated_at)">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>-->
+
+                <button mat-icon-button color="accent" (click)="deleteItem(i, produto.idProduto,produto.descProduto, produto.codigoBarras)">
+                  <mat-icon aria-label="Delete">delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let produto; columns: displayedColumns;"></mat-row>
+          </mat-table>
+
+
+          <div class="no-results" [style.display]="dataSource.renderedData.length == 0 ? '' : 'none'">
+            No results
+          </div>
+
+          <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 100]">
+          </mat-paginator>
+        </div>
+
       </nb-card-body>
     </nb-card>
   </div>
