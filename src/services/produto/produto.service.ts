@@ -70,6 +70,16 @@ export class ProdutoService {
       catchError(this.handleError)
     );
   }
+  // UPDATE, PUT METHOD
+  updateProduct(produto: Produto): void {
+    this.httpClient.put(this.produtoUrl + produto.idProduto, produto).subscribe(data => {
+        this.dialogData = produto;        
+      },
+      (err: HttpErrorResponse) => {
+        catchError(this.handleError)
+      }
+    );
+  }
 
   // API: GET /Produtos
   getProdutos(): Observable<Produto[]> {

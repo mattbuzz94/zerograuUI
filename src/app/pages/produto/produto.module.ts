@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatFormField, MatNativeDateModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatRippleModule, MatSortModule, MatToolbarModule, MatPaginatorModule } from '@angular/material';
 import { DeleteDialogComponent } from './produto-list/dialogs/delete/delete.dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditDialogComponent } from './produto-list/dialogs/edit/edit.dialog.component';
 
 @NgModule({
   imports: [
@@ -26,8 +27,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     ReactiveFormsModule
   ],
-  entryComponents: [DeleteDialogComponent],//Necessário para fazer aparecer o Dialog
-  declarations: [...routedComponents, DeleteDialogComponent,]
+  entryComponents: [DeleteDialogComponent,EditDialogComponent],//Necessário para fazer aparecer o Dialog
+  declarations: [...routedComponents, DeleteDialogComponent,EditDialogComponent]
 
 })
 export class ProdutoModule { }

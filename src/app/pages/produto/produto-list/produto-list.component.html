@@ -56,9 +56,9 @@
               </mat-header-cell>
 
               <mat-cell *matCellDef="let produto; let i=index;">
-                <!--  <button mat-icon-button color="accent" (click)="startEdit(i, produto.id, produto.title, produto.state, produto.url, produto.created_at, produto.updated_at)">
-          <mat-icon aria-label="Edit">edit</mat-icon>
-        </button>-->
+                <button mat-icon-button color="accent" (click)="startEdit(i, produto.idProduto,produto.descProduto, produto.codigoBarras,produto.qtdEstoque,produto.precoVenda,produto.precoCompra)">
+                  <mat-icon aria-label="Edit">edit</mat-icon>
+                </button>
 
                 <button mat-icon-button color="accent" (click)="deleteItem(i, produto.idProduto,produto.descProduto, produto.codigoBarras)">
                   <mat-icon aria-label="Delete">delete</mat-icon>

@@ -7,7 +7,7 @@ import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProdutoService } from '../../../../services/produto/produto.service';
 import { Produto } from '../../../../services/produto/produto';
-
+import { EditDialogComponent } from './dialogs/edit/edit.dialog.component';
 @Component({
   selector: 'produto-list',
   templateUrl: './produto-list.component.html',
@@ -43,7 +43,24 @@ export class ProdutoListComponent implements OnInit {
     this.idProduto = row.idProduto;
     console.log('Row clicked: ', row);
   }
-   
+  startEdit(i: number, idProduto: number, descProduto: string, codigoBarras: number, qtdEstoque: number, precoVenda: number, precoCompra: number, ) {
+    this.idProduto = idProduto;
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      data: { idProduto: idProduto, descProduto: descProduto, codigoBarras: codigoBarras, qtdEstoque: qtdEstoque, precoVenda: precoVenda, precoCompra: precoCompra }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        const foundIndex = this.produtoService.dataChange.value.findIndex(x => x.idProduto === this.idProduto);
+        // Then you update that record using data from dialogData (values you enetered)
+        this.produtoService.dataChange.value[foundIndex] = this.dataService.getDialogData();
+        // And lastly refresh table
+        this.refreshTable();
+      }
+    });
+  }
+
   deleteItem(i: number, idProduto: number, descProduto: string, codigoBarras: number) {
     this.index = i;
     this.idProduto = idProduto;
@@ -82,8 +99,6 @@ export class ProdutoListComponent implements OnInit {
       });
   }
 }
-
-
 export class ProdutoDataSource extends DataSource<Produto> {
   _filterChange = new BehaviorSubject('');
 
@@ -118,7 +133,6 @@ export class ProdutoDataSource extends DataSource<Produto> {
 
     this._exampleDatabase.getAllProdutos();
 
-
     return merge(...displayDataChanges).pipe(map(() => {
       // Filter data
       this.filteredData = this._exampleDatabase.data.slice().filter((produto: Produto) => {
@@ -138,7 +152,6 @@ export class ProdutoDataSource extends DataSource<Produto> {
   }
 
   disconnect() { }
-
 
   /** Returns a sorted copy of the database data. */
   sortData(data: Produto[]): Produto[] {
@@ -166,18 +179,3 @@ export class ProdutoDataSource extends DataSource<Produto> {
     });
   }
 }
-
-/*
-ESSE MÈTODO FUNCIONA PARA A CONSULTA SIMPLE
-export class ProdutoDataSource extends DataSource<any> {
-
-  constructor(private produtoService: ProdutoService) {
-    super();
-  }
-
-  connect(): Observable<Produto[]> {
-    return this.produtoService.getProdutos();
-  }
-
-  disconnect() { }
-}*/
