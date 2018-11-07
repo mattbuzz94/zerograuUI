@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { VendaComponent } from './venda/venda.component';
 
 const routes: Routes = [{
   path: '',
@@ -13,9 +14,13 @@ const routes: Routes = [{
       component: DashboardComponent,
     },
     {
+      path: 'venda',
+      component: VendaComponent,
+    },
+    {
       path: 'produto',
       loadChildren: './produto/produto.module#ProdutoModule',
-    },
+    },    
     {
       path: '',
       redirectTo: 'dashboard',

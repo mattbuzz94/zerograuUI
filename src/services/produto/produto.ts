@@ -11,3 +11,12 @@ export class Produto {
         public qtdEstoque?: number) { }
 
 }
+
+
+export declare type Produtos = Produto[];
+export interface IProdutoResponse {
+    total_count: number;
+    incomplete_results: boolean;
+    produtos: Produtos;
+  }
+

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>Venda</nb-card-header>
+      <nb-card-body>
+        <form>
+          <mat-form-field class="container">
+
+            <!-- ADD AN INPUT BOX OF TYPE TEXT AND LINK IT TO THE AUTO COMPLETE PANEL. -->
+            <input type="text" placeholder="Procure Produtos ..." matInput [formControl]="vendaForm" [matAutocomplete]="auto">
+
+            <!-- CREATE AUTO COMPLETE PANEL WITH OPTIONS. -->
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let result of results" [value]="result.descProduto">
+                {{ result.descProduto }}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

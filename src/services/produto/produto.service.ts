@@ -2,9 +2,8 @@ import { throwError as observableThrowError, Observable, throwError, BehaviorSub
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Produto } from './produto';
-import { MessageService } from '../message.service';
+import { catchError, map, tap, debounceTime } from 'rxjs/operators';
+import { Produto, IProdutoResponse } from './produto';
 
 const API_URL = environment.apiUrl;
 
@@ -21,13 +20,56 @@ export class ProdutoService {
   dataChange: BehaviorSubject<Produto[]> = new BehaviorSubject<Produto[]>([]);
   // Temporarily stores data from dialogs
   dialogData: any;
+  produtos: Produto[] = [];
   constructor(private httpClient: HttpClient) { }
+
+  search1(term) {
+    const params = new HttpParams()
+      .set('descProduto', term)
+      .set('codigoBarras', '123');
+      var listOfBooks= this.httpClient.get(this.produtoUrl + 'busca/', { params })
+      .pipe(
+        debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
+        map(
+          (data: any) => {
+            return (
+              data.length != 0 ? data as any[] : [{ "BookName": "No Record Found" } as any]
+            );
+          }
+        ));
+    
+
+    return listOfBooks;
+  }
+// Esse método funcionan para retornar o json porém não exibe no html
+  search(query: string): Observable<IProdutoResponse> {
+    return this.httpClient
+      .get<IProdutoResponse>(this.produtoUrl + 'busca/', {
+        observe: 'response',
+        params: {
+          descProduto: query,
+          codigoBarras: '123',
+        }
+      })
+      .pipe(
+        map(res => {
+          console.log(res.body)
+          return res.body;
+        })
+      );
+  }
 
   get data(): Produto[] {
     return this.dataChange.value;
   }
   getDialogData() {
     return this.dialogData;
+  }
+  setProdutoData(data: Produto[]) {
+    this.produtos = data;
+  }
+  getProdutoData() {
+    return this.produtos;
   }
   /*getProdutoNo404<Data>(id: number): Observable<Produto> {
     const url = `${this.produtoUrl}/?id=${id}`;
@@ -73,8 +115,8 @@ export class ProdutoService {
   // UPDATE, PUT METHOD
   updateProduct(produto: Produto): void {
     this.httpClient.put(this.produtoUrl + produto.idProduto, produto).subscribe(data => {
-        this.dialogData = produto;        
-      },
+      this.dialogData = produto;
+    },
       (err: HttpErrorResponse) => {
         catchError(this.handleError)
       }
@@ -96,23 +138,13 @@ export class ProdutoService {
   /** CRUD METHODS */
   getAllProdutos(): void {
     this.httpClient.get<Produto[]>(this.produtoUrl).subscribe(data => {
-        this.dataChange.next(data);
-      },
+      this.dataChange.next(data);
+    },
       (error: HttpErrorResponse) => {
-      console.log (error.name + ' ' + error.message);
+        console.log(error.name + ' ' + error.message);
       });
   }
 
-  public getProdutosBusca(textoBusca: string, projeto: string): Observable<Produto[]> {
-    const url = `${API_URL}busca/?textoBusca='${textoBusca}/?modulo='${projeto}`;
-    return this.httpClient.get<Produto[]>(url).pipe(
-      tap(Produtos => {
-        console.log(`fetched Produto id=${textoBusca}`);
-        console.log(Produtos);
-      }),
-      catchError(this.handleError)
-    );
-  }
   getProduto(id: number): Observable<Produto> {
     const url = `${API_URL}/${id}`;
     return this.httpClient.get<Produto>(url).pipe(
@@ -120,17 +152,23 @@ export class ProdutoService {
       catchError(this.handleError)
     );
   }
-  getRepos(textoBusca: string, modulo: string): Observable<Produto[]> {
-    // tslint:disable-next-line:prefer-const
-    let params = new HttpParams()
-      .set('textoBusca', textoBusca)
-      .set('modulo', modulo);
-    console.log(params.toString());
-    return this.httpClient.get<Produto[]>(API_URL + 'Produto/busca/', { params });
+  getProdutoByCodigoBarras(codigoBarras: number, descProduto: string): Observable<Produto[]> {
+    const params = new HttpParams()
+      .set('descProduto', descProduto)
+      .set('codigoBarras', codigoBarras.toString());
+    return this.httpClient.get<Produto[]>(this.produtoUrl + 'busca/', { params }).pipe(
+      tap(produtos => {
+        // tslint:disable-next-line:no-console
+        console.log(`codigo de Barras=${codigoBarras}`);
+        // tslint:disable-next-line:no-console
+        console.log(produtos);
+        this.setProdutoData(produtos);
+      }),
+      catchError(this.handleError)
+    );
   }
-
   // log(message: string) {
-    //this.messageService.add(`ProdutoService: ${message}`);
+  //this.messageService.add(`ProdutoService: ${message}`);
   //}
 
   private handleError(error: HttpErrorResponse) {
@@ -144,7 +182,7 @@ export class ProdutoService {
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
     }
-    // return an observable with a user-facing error message
+    // return an observable with a produto-facing error message
     return throwError(
       'Something bad happened; please try again later.');
   };
