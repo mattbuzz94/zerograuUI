@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   template: `
     <span class="created-by"><b>Zero Grau</b> Depósito de Bebidas</span>
-    
   `,
 })
 export class FooterComponent {

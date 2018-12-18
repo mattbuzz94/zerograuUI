@@ -8,12 +8,12 @@ import { Venda } from './venda';
 const API_URL = environment.apiUrl;
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' as 'json'
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' as 'json',
 };
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VendaService {
   private vendaUrl = API_URL + 'venda/';  // URL to web api
@@ -50,7 +50,7 @@ export class VendaService {
     return this.httpClient.post<Venda>(this.vendaUrl, venda, httpOptions)
       .pipe(
         tap((venda: Venda) => console.log(`added venda w/ id=${venda.idVenda}`)),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -61,7 +61,7 @@ export class VendaService {
 
     return this.httpClient.delete<Venda>(url, httpOptions).pipe(
       tap(_ => console.log(`deleted venda id=${id}`)),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -79,7 +79,7 @@ export class VendaService {
     },
       (err: HttpErrorResponse) => {
         catchError(this.handleError)
-      }
+      },
     );
   }
 
@@ -91,7 +91,7 @@ export class VendaService {
           console.log('Vendas fetched...');
           console.log(Vendas);
         }),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -112,14 +112,14 @@ export class VendaService {
         console.log(`fetched Venda id=${textoBusca}`);
         console.log(Vendas);
       }),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
   getVenda(id: number): Observable<Venda> {
     const url = `${API_URL}/${id}`;
     return this.httpClient.get<Venda>(url).pipe(
       tap(_ => console.log(`fetched Venda id=${id}`)),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
   getRepos(textoBusca: string, modulo: string): Observable<Venda[]> {

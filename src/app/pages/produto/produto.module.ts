@@ -4,7 +4,11 @@ import { ProdutoRoutingModule, routedComponents } from './produto-routing.module
 import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule, MatFormField, MatNativeDateModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatRippleModule, MatSortModule, MatToolbarModule, MatPaginatorModule } from '@angular/material';
+import {
+  MatDialogModule, MatFormField, MatNativeDateModule,
+  MatButtonModule, MatFormFieldModule, MatInputModule, MatRippleModule,
+  MatSortModule, MatToolbarModule, MatPaginatorModule,
+} from '@angular/material';
 import { DeleteDialogComponent } from './produto-list/dialogs/delete/delete.dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditDialogComponent } from './produto-list/dialogs/edit/edit.dialog.component';
@@ -25,10 +29,10 @@ import { EditDialogComponent } from './produto-list/dialogs/edit/edit.dialog.com
     MatSortModule,
     MatToolbarModule,
     MatPaginatorModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  entryComponents: [DeleteDialogComponent,EditDialogComponent],//Necessário para fazer aparecer o Dialog
-  declarations: [...routedComponents, DeleteDialogComponent,EditDialogComponent]
+  entryComponents: [DeleteDialogComponent, EditDialogComponent], // Necessário para fazer aparecer o Dialog
+  declarations: [...routedComponents, DeleteDialogComponent, EditDialogComponent],
 
 })
 export class ProdutoModule { }

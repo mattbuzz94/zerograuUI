@@ -9,12 +9,12 @@ import { ProdutoService } from '../../../../services/produto/produto.service';
 import { Produto } from '../../../../services/produto/produto';
 import { EditDialogComponent } from './dialogs/edit/edit.dialog.component';
 @Component({
-  selector: 'produto-list',
+  selector: 'ngx-produto-list',
   templateUrl: './produto-list.component.html',
-  styleUrls: ['./produto-list.component.scss']
+  styleUrls: ['./produto-list.component.scss'],
 })
 export class ProdutoListComponent implements OnInit {
-  //dataSource = new ProdutoDataSource(this.produtoService);
+  // dataSource = new ProdutoDataSource(this.produtoService);
   displayedColumns = ['idProduto', 'descProduto', 'precoCompra', 'precoVenda', 'actions'];
   produtos: Produto[] = [];
   idProduto: number;
@@ -43,10 +43,12 @@ export class ProdutoListComponent implements OnInit {
     this.idProduto = row.idProduto;
     console.log('Row clicked: ', row);
   }
-  startEdit(i: number, idProduto: number, descProduto: string, codigoBarras: number, qtdEstoque: number, precoVenda: number, precoCompra: number, ) {
+  startEdit(i: number, idProduto: number, descProduto: string, codigoBarras: number,
+     qtdEstoque: number, precoVenda: number, precoCompra: number) {
     this.idProduto = idProduto;
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: { idProduto: idProduto, descProduto: descProduto, codigoBarras: codigoBarras, qtdEstoque: qtdEstoque, precoVenda: precoVenda, precoCompra: precoCompra }
+      data: { idProduto: idProduto, descProduto: descProduto, codigoBarras: codigoBarras,
+         qtdEstoque: qtdEstoque, precoVenda: precoVenda, precoCompra: precoCompra },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -65,7 +67,7 @@ export class ProdutoListComponent implements OnInit {
     this.index = i;
     this.idProduto = idProduto;
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: { idProduto: idProduto, descProduto: descProduto, codigoBarras: codigoBarras }
+      data: { idProduto: idProduto, descProduto: descProduto, codigoBarras: codigoBarras },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -128,7 +130,7 @@ export class ProdutoDataSource extends DataSource<Produto> {
       this._exampleDatabase.dataChange,
       this._sort.sortChange,
       this._filterChange,
-      this._paginator.page
+      this._paginator.page,
     ];
 
     this._exampleDatabase.getAllProdutos();
@@ -147,7 +149,7 @@ export class ProdutoDataSource extends DataSource<Produto> {
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
       return this.renderedData;
-    }
+    },
     ));
   }
 

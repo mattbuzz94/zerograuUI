@@ -5,7 +5,7 @@ import { VendaService } from './venda.service';
 describe('VendaService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [VendaService]
+      providers: [VendaService],
     });
   });
 

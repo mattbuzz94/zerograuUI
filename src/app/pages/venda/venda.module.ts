@@ -10,7 +10,7 @@ import { ProdutoService } from '../../../services/produto/produto.service';
 
 @NgModule({
   imports: [
-    ThemeModule,    
+    ThemeModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

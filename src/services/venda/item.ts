@@ -1,7 +1,6 @@
-import { Produto } from "../produto/produto";
-import { Venda } from "./venda";
+import { Produto } from '../produto/produto';
 
-export class Item{
+export interface Item {
 
     id: number;
     totalPrice: number;

@@ -6,9 +6,9 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'produto-input',
+  selector: 'ngx-produto-input',
   templateUrl: './produto-input.component.html',
-  styleUrls: ['./produto-input.component.scss']
+  styleUrls: ['./produto-input.component.scss'],
 })
 export class ProdutoInputComponent implements OnInit {
   produtoForm: FormGroup;
@@ -25,7 +25,7 @@ export class ProdutoInputComponent implements OnInit {
       codigoBarras: ['', [Validators.required, Validators.maxLength(50)]],
       qtdEstoque: '',
       precoVenda: '',
-      precoCompra: ''
+      precoCompra: '',
     });
 
     /*this.produtoForm.get('notification').valueChanges
@@ -59,12 +59,12 @@ export class ProdutoInputComponent implements OnInit {
 
   showSuccess() {
     this.toastr.success('Sucesso!', 'Cadastrado com sucesso!', {
-      timeOut: 3000
+      timeOut: 3000,
     });
   }
   showError() {
     this.toastr.error('Erro', 'Produto não cadastrado!', {
-      timeOut: 3000
+      timeOut: 3000,
     });
   }
 }

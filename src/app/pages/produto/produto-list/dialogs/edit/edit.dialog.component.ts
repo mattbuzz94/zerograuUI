@@ -7,15 +7,15 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-baza.dialog',
   templateUrl: '../../dialogs/edit/edit.dialog.html',
-  styleUrls: ['../../dialogs/edit/edit.dialog.css']
+  styleUrls: ['../../dialogs/edit/edit.dialog.css'],
 })
 export class EditDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public dataService: ProdutoService,public toastr : ToastrService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any, public dataService: ProdutoService, public toastr: ToastrService) { }
 
   formControl = new FormControl('', [
-    Validators.required
+    Validators.required,
     // Validators.email,
   ]);
 
@@ -40,12 +40,12 @@ export class EditDialogComponent {
 
   showSuccess() {
     this.toastr.success('Sucesso!', 'Produto excluído!', {
-      timeOut: 3000
+      timeOut: 3000,
     });
   }
   showError() {
     this.toastr.error('Erro', 'Erro ao excluir produto', {
-      timeOut: 3000
+      timeOut: 3000,
     });
   }
 }

@@ -8,12 +8,12 @@ import { Produto, IProdutoResponse } from './produto';
 const API_URL = environment.apiUrl;
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' as 'json'
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' as 'json',
 };
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProdutoService {
   private produtoUrl = API_URL + 'produto/';  // URL to web api
@@ -26,19 +26,17 @@ export class ProdutoService {
   search1(term) {
     const params = new HttpParams()
       .set('descProduto', term)
-      .set('codigoBarras', '123');
-      var listOfBooks= this.httpClient.get(this.produtoUrl + 'busca/', { params })
+      .set('codigoBarras', '123'); // Hardcode parameter just for tests
+      const listOfBooks = this.httpClient.get(this.produtoUrl + 'busca/', { params })
       .pipe(
         debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
         map(
           (data: any) => {
             return (
-              data.length != 0 ? data as any[] : [{ "BookName": "No Record Found" } as any]
+              data.length !== 0 ? data as any[] : [{ 'Produto': 'No Record Found' } as any]
             );
-          }
+          },
         ));
-    
-
     return listOfBooks;
   }
 // Esse método funcionan para retornar o json porém não exibe no html
@@ -49,13 +47,13 @@ export class ProdutoService {
         params: {
           descProduto: query,
           codigoBarras: '123',
-        }
+        },
       })
       .pipe(
         map(res => {
           console.log(res.body)
           return res.body;
-        })
+        }),
       );
   }
 
@@ -90,7 +88,7 @@ export class ProdutoService {
     return this.httpClient.post<Produto>(this.produtoUrl, produto, httpOptions)
       .pipe(
         tap((produto: Produto) => console.log(`added produto w/ id=${produto.idProduto}`)),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -101,7 +99,7 @@ export class ProdutoService {
 
     return this.httpClient.delete<Produto>(url, httpOptions).pipe(
       tap(_ => console.log(`deleted produto id=${id}`)),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -109,7 +107,7 @@ export class ProdutoService {
   updateProduto(produto: Produto): Observable<any> {
     return this.httpClient.put(this.produtoUrl, produto, httpOptions).pipe(
       tap(_ => console.log(`updated produto id=${produto.idProduto}`)),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
   // UPDATE, PUT METHOD
@@ -119,7 +117,7 @@ export class ProdutoService {
     },
       (err: HttpErrorResponse) => {
         catchError(this.handleError)
-      }
+      },
     );
   }
 
@@ -131,7 +129,7 @@ export class ProdutoService {
           console.log('Produtos fetched...');
           console.log(Produtos);
         }),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -149,7 +147,7 @@ export class ProdutoService {
     const url = `${API_URL}/${id}`;
     return this.httpClient.get<Produto>(url).pipe(
       tap(_ => console.log(`fetched Produto id=${id}`)),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
   getProdutoByCodigoBarras(codigoBarras: number, descProduto: string): Observable<Produto[]> {
@@ -164,12 +162,12 @@ export class ProdutoService {
         console.log(produtos);
         this.setProdutoData(produtos);
       }),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
   // log(message: string) {
-  //this.messageService.add(`ProdutoService: ${message}`);
-  //}
+  // this.messageService.add(`ProdutoService: ${message}`);
+  // }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

@@ -17,6 +17,25 @@ import {
   NbCheckboxModule,
   NbPopoverModule,
   NbContextMenuModule,
+  NbProgressBarModule,
+  NbCalendarModule,
+  NbCalendarRangeModule,
+  NbStepperModule,
+  NbButtonModule,
+  NbInputModule,
+  NbAccordionModule,
+  NbDatepickerModule,
+  NbDialogModule,
+  NbWindowModule,
+  NbListModule,
+  NbToastrModule,
+  NbAlertModule,
+  NbSpinnerModule,
+  NbRadioModule,
+  NbSelectModule,
+  NbChatModule,
+  NbTooltipModule,
+  NbCalendarKitModule,
 } from '@nebular/theme';
 
 import { NbSecurityModule } from '@nebular/security';
@@ -29,9 +48,17 @@ import {
   SwitcherComponent,
   LayoutDirectionSwitcherComponent,
   ThemeSwitcherComponent,
+  TinyMCEComponent,
   ThemeSwitcherListComponent,
 } from './components';
-import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
+import {
+  CapitalizePipe,
+  PluralPipe,
+  RoundPipe,
+  TimingPipe,
+  NumberWithCommasPipe,
+  EvaIconsPipe,
+} from './pipes';
 import {
   OneColumnLayoutComponent,
   SampleLayoutComponent,
@@ -58,7 +85,26 @@ const NB_MODULES = [
   NbPopoverModule,
   NbContextMenuModule,
   NgbModule,
-  NbSecurityModule, // *nbIsGranted directive
+  NbSecurityModule, // *nbIsGranted directive,
+  NbProgressBarModule,
+  NbCalendarModule,
+  NbCalendarRangeModule,
+  NbStepperModule,
+  NbButtonModule,
+  NbListModule,
+  NbToastrModule,
+  NbInputModule,
+  NbAccordionModule,
+  NbDatepickerModule,
+  NbDialogModule,
+  NbWindowModule,
+  NbAlertModule,
+  NbSpinnerModule,
+  NbRadioModule,
+  NbSelectModule,
+  NbChatModule,
+  NbTooltipModule,
+  NbCalendarKitModule,
 ];
 
 const COMPONENTS = [
@@ -70,6 +116,7 @@ const COMPONENTS = [
   FooterComponent,
   SearchInputComponent,
   ThemeSettingsComponent,
+  TinyMCEComponent,
   OneColumnLayoutComponent,
   SampleLayoutComponent,
   ThreeColumnsLayoutComponent,
@@ -85,8 +132,10 @@ const PIPES = [
   PluralPipe,
   RoundPipe,
   TimingPipe,
+  NumberWithCommasPipe,
+  EvaIconsPipe,
 ];
-//Aqui Altera o tema padrão
+// Aqui Altera o tema padrão
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
@@ -96,6 +145,13 @@ const NB_THEME_PROVIDERS = [
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
+  ...NbDatepickerModule.forRoot().providers,
+  ...NbDialogModule.forRoot().providers,
+  ...NbWindowModule.forRoot().providers,
+  ...NbToastrModule.forRoot().providers,
+  ...NbChatModule.forRoot({
+    messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
+  }).providers,
 ];
 
 @NgModule({
